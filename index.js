@@ -2,7 +2,7 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 
-const generateHTML = ({ name, location, github, linkedin }) =>
+const generateSVG = ({ text, textcolor, shape, shapecolor }) =>
   `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,17 +12,13 @@ const generateHTML = ({ name, location, github, linkedin }) =>
   <title>Document</title>
 </head>
 <body>
-  <header class="p-5 mb-4 header bg-light">
-    <div class="container">
-      <h1 class="display-4">Hi! My name is ${name}</h1>
-      <p class="lead">I am from ${location}.</p>
-      <h3>Example heading <span class="badge bg-secondary">Contact Me</span></h3>
-      <ul class="list-group">
-        <li class="list-group-item">My GitHub username is ${github}</li>
-        <li class="list-group-item">LinkedIn: ${linkedin}</li>
-      </ul>
-    </div>
-  </header>
+  <svg version="1.1"
+     width="300" height="200"
+     xmlns="http://www.w3.org/2000/svg">
+    <circle cx="150" cy="100" r="80" fill="${shapecolor}" />
+    <text x="150" y="125" font-size="60" text-anchor="middle" fill="${textcolor}">${text}</text>
+</svg>
+   ${shape}
 </body>
 </html>`;
 
@@ -30,41 +26,36 @@ const questions = () => inquirer
   .prompt([
     {
       type: 'input',
-      name: 'name',
-      message: 'What is your name?',
+      name: 'text',
+      message: 'Enter a maximum of three characters',
     },
     {
       type: 'input',
-      name: 'location',
-      message: 'Where are you from?',
+      name: 'textcolor',
+      message: 'Enter a color (or a hexidecimal code) for the text',
+    },
+    {
+      name: 'shape',
+      type: 'list',
+      message: 'What shape would you like?',
+      choices: [
+      'Triangle',
+      'Circle',
+      'Square',
+      ]
     },
     {
       type: 'input',
-      name: 'hobby',
-      message: 'What is your favorite hobby?',
-    },
-    {
-      type: 'input',
-      name: 'food',
-      message: 'What is your favorite food?',
-    },
-    {
-      type: 'input',
-      name: 'github',
-      message: 'Enter your GitHub Username',
-    },
-    {
-      type: 'input',
-      name: 'linkedin',
-      message: 'Enter your LinkedIn URL.',
+      name: 'shapecolor',
+      message: 'Enter a background color (or a hexidecimal code) for the shape',
     },
   ])
   questions()
     .then((answers) => {
-      const htmlPageContent = generateHTML(answers);
-      fs.writeFileSync('index.html', htmlPageContent)
+      const svgLogoContent = generateSVG(answers);
+      fs.writeFileSync('./lib/logo.svg', svgLogoContent)
     })
   .then(() => 
-    console.log('Successfully created index.html!')
+    console.log('Generated logo.svg!')
   )
   .catch(err => console.log(err));
