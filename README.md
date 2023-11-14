@@ -26,4 +26,4 @@ email: elliott.brest@gmail.com
 
 GitHub username: ebrest993
 
-[Demo Video](./Images/logo%20generator.mp4)
+[Demo Video](./Images/logo-generator.mp4)
